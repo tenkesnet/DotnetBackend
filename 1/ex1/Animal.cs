@@ -36,10 +36,10 @@ namespace MyApp
             return "";
         }
 
-        override public String ToString()
-        {
-            return "A ToString feluldefiniálása miatt. A nevem: " + name;
-        }
+        // override public String ToString()
+        // {
+        //     return "A ToString feluldefiniálása miatt. A nevem: " + name;
+        // }
 
     }
 }
