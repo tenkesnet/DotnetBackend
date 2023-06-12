@@ -1,4 +1,6 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Http.HttpResults;
+using System.Data;
 using Tanulok.Model;
 
 namespace Tanulok.Repository
@@ -18,6 +20,19 @@ namespace Tanulok.Repository
                     var companies = await connection.QueryAsync<Tanar>(query);
                     return companies.ToList();
                 }
-            }
+        }
+
+        public async Task<string> setTanar(Tanar tanar)
+        {
+                _context.connection.Execute("Insert into tanarok (name, szuldatum, nem, fotantargy) " +
+                    "values (@name, @szuldatum, @nem, @fotantargy)", new
+                    {
+                        name = tanar.Name,
+                        szuldatum = tanar.SzulDatum,
+                        nem = tanar.Nem,
+                        fotantargy = tanar.foTantargy
+                    });
+            return "Ok";
+        }
     }
 }

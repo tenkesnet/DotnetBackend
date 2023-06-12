@@ -9,9 +9,11 @@ namespace Tanulok.Controllers
     public class HomeController :ControllerBase
     {
         private readonly ITanuloRepository _tanuloRepo;
-        public HomeController(ITanuloRepository tanuloRepo, DapperContext dapperContext)
+        private readonly ITanarRepository _tanarRepo;
+        public HomeController(ITanuloRepository tanuloRepo, ITanarRepository tanarRepo , DapperContext dapperContext)
         {
             _tanuloRepo = tanuloRepo;
+            _tanarRepo = tanarRepo;
         }
         [HttpGet]
         public async Task<IActionResult> GetTanulok()
@@ -27,6 +29,25 @@ namespace Tanulok.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
+        [HttpGet]
+        public async Task<IActionResult> GetTanarok()
+        {
+            try
+            {
+                var companies = await _tanarRepo.GetTanarok();
+                return Ok(companies);
+            }
+            catch (Exception ex)
+            {
+                //log error
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPost]
+        public async Task<string> setTanar(Tanar tanar)
+        {
+            _tanarRepo.setTanar(tanar);
+            return "Ok";
+        }
     }
 }
