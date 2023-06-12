@@ -36,16 +36,15 @@ public class WeatherForecastController : ControllerBase
     [HttpGet]
     public IEnumerable<Person> Peoples()
     {
-
-
         return szemelyek;
     }
 
     [HttpPost]
-    public IEnumerable<Person> setPeoples(Person person)
+    public Person setPeoples(Person person)
     {
-        szemelyek.Add(person);
-        return szemelyek;
+        person.name +="!";
+        person.varosok.Add("Eger");
+        return person;
 
     }
 

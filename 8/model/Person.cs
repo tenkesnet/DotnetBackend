@@ -13,6 +13,6 @@ public class Person
         this.birthDate = birthDate;
         varosok = new List<string>();
         varosok.Add("Szeged");
-        varosok.Add("budapest");
+        varosok.Add("Budapest");
     }
 }
