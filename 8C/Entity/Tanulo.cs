@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Tanulok.Model;
+namespace Tanulok.Entity;
 public class Tanulo :Szemely
 {
 
@@ -13,14 +13,11 @@ public class Tanulo :Szemely
         this.SzulDatum = SzulDatum;
         this.Nem = Nem;
         this.TanAtlag = TanAtlag;
-        Lakcim = new Cim();
-        LakcimLista = new List<Cim>();
-        LakcimLista.Add(Lakcim);
+        lakcim = new Lakcim();
     }
     public Tanulo()
-    {
-        Lakcim = new Cim();
-        LakcimLista = new List<Cim>();
+    { 
+        lakcim = new Lakcim();
     }
     
 }

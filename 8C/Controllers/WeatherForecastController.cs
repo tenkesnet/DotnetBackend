@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Tanulok.Model;
+using Tanulok.Entity;
 using Tanulok.Service;
 
 namespace Tanulok.Controllers;

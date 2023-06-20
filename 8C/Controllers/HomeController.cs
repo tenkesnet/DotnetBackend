@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Tanulok.Model;
+using Tanulok.Entity;
+using Tanulok.Helper;
 using Tanulok.Repository;
 
 namespace Tanulok.Controllers
@@ -44,10 +45,15 @@ namespace Tanulok.Controllers
             }
         }
         [HttpPost]
-        public async Task<string> setTanar(Tanar tanar)
+        public async Task<ValidationResult> setTanar(Tanar tanar)
         {
-            _tanarRepo.setTanar(tanar);
-            return "Ok";
+            ValidationResult validationResult= TanarHelper.validateTanar(tanar);
+            if (validationResult.isValid)
+            {
+                _tanarRepo.setTanar(tanar);
+                return validationResult;
+            }
+            return validationResult;
         }
     }
 }

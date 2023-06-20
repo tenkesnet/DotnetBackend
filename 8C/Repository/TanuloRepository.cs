@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Tanulok.Model;
+using Tanulok.Entity;
 
 namespace Tanulok.Repository
 {

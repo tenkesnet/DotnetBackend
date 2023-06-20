@@ -1,4 +1,4 @@
-﻿using Tanulok.Model;
+﻿using Tanulok.Entity;
 
 namespace Tanulok.Service
 {
@@ -19,12 +19,12 @@ namespace Tanulok.Service
             if (altSzemely is Tanulo)
             {
                 Tanulo obj = altSzemely as Tanulo;
-                stringObj = $"{obj.Name};{obj.SzulDatum};{obj.Nem};{obj.TanAtlag};{obj.Lakcim.varos};{obj.Lakcim.utca};{obj.Lakcim.hazszam}";
+                stringObj = $"{obj.Name};{obj.SzulDatum};{obj.Nem};{obj.TanAtlag}";
             }
             else
             {
                 Tanar obj = altSzemely as Tanar;
-                stringObj = $"{obj.Name};{obj.SzulDatum};{obj.Nem};{obj.foTantargy};{obj.Lakcim.varos};{obj.Lakcim.utca};{obj.Lakcim.hazszam}";
+                stringObj = $"{obj.Name};{obj.SzulDatum};{obj.Nem};{obj.foTantargy}";
             }
             writer.WriteLine(stringObj);  //kiírja stringobj változó tartalmát a megadott fájlba
             writer.Close();  //lezárja a fájlt
@@ -51,9 +51,6 @@ namespace Tanulok.Service
                 {
                     (szemely as Tanar).foTantargy = data[3];
                 }                
-                szemely.Lakcim.varos = data[4]; 
-                szemely.Lakcim.utca = data[5];
-                szemely.Lakcim.hazszam = Int16.Parse(data[6]);
                 szemelyek.Add(szemely);
 
                 line = reader.ReadLine();

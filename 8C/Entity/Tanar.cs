@@ -1,4 +1,4 @@
-﻿namespace Tanulok.Model
+﻿namespace Tanulok.Entity
 {
     public class Tanar :Szemely
     {
@@ -6,8 +6,7 @@
         public string foTantargy { get; set; }
         public Tanar ()
         {
-            Lakcim = new Cim();
-            LakcimLista = new List<Cim>();
+            //lakcim = new Lakcim();
         }
     }
 }

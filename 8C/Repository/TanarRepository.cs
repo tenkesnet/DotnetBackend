@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Data;
-using Tanulok.Model;
+using Tanulok.Entity;
 
 namespace Tanulok.Repository
 {
@@ -22,17 +22,18 @@ namespace Tanulok.Repository
                 }
         }
 
-        public async Task<string> setTanar(Tanar tanar)
+        public async Task<int> setTanar(Tanar tanar)
         {
-                _context.connection.Execute("Insert into tanarok (name, szuldatum, nem, fotantargy) " +
-                    "values (@name, @szuldatum, @nem, @fotantargy)", new
-                    {
-                        name = tanar.Name,
-                        szuldatum = tanar.SzulDatum,
-                        nem = tanar.Nem,
-                        fotantargy = tanar.foTantargy
-                    });
-            return "Ok";
+            int id = _context.connection.QuerySingle<int>("Insert into tanarok (name, szuldatum, nem, fotantargy) " +
+                                "values (@name, @szuldatum, @nem, @fotantargy);" +
+                                "select seq from sqlite_sequence WHERE name='tanarok';", new
+                                {
+                                    name = tanar.Name,
+                                    szuldatum = tanar.SzulDatum,
+                                    nem = tanar.Nem,
+                                    fotantargy = tanar.foTantargy
+                                });
+            return id;
         }
     }
 }

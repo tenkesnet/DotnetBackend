@@ -1,10 +1,10 @@
-﻿using Tanulok.Model;
+﻿using Tanulok.Entity;
 
 namespace Tanulok.Repository
 {
     public interface ITanarRepository
     {
         public Task<IEnumerable<Tanar>> GetTanarok();
-        public Task<string> setTanar(Tanar tanar);
+        public Task<int> setTanar(Tanar tanar);
     }
 }
