@@ -4,9 +4,10 @@
     {
 
         public string foTantargy { get; set; }
+        public Lakcim lakcim { get; set; }
         public Tanar ()
         {
-            //lakcim = new Lakcim();
+            //Lakcim lakcim = new Lakcim();
         }
     }
 }

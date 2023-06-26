@@ -18,7 +18,7 @@ public class WeatherForecastController : ControllerBase
     public WeatherForecastController(ILogger<WeatherForecastController> logger)
     {
         _logger = logger;
-        TanulokLista.Add(new Tanulo("Kiss Roland", DateTime.Parse("2009-04-16"),"fiú",4.27));
+        /*TanulokLista.Add(new Tanulo("Kiss Roland", DateTime.Parse("2009-04-16"),"fiú",4.27));
         TanulokLista.Add(new Tanulo("Nagy Emese", DateTime.Parse("2010-07-21"),"lány",4.68));
         TanulokLista.Add(new Tanulo("Szabó Tamás", DateTime.Parse("2008-10-06"), "fiú", 3.42));
         FileDatabase<Tanulo> filedata = new Service.FileDatabase<Tanulo>(@"C:\Users\Kovács Zsolt\Documents\database.txt");
@@ -64,9 +64,9 @@ public class WeatherForecastController : ControllerBase
             foreach (Tanulo tan2 in TanulokLista)
             {
                 TanulokSzama++;
-                TanulokAtlaganakOsszege+=tan2.TanAtlag;
+                TanulokAtlaganakOsszege+=tan2.tanAtlag;
                 tan.TanulokOsszesitettAtlaga=TanulokAtlaganakOsszege/TanulokSzama;
             }
-            return TanulokLista;
+            return TanulokLista;*/
         }
 }

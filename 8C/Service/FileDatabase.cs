@@ -19,12 +19,12 @@ namespace Tanulok.Service
             if (altSzemely is Tanulo)
             {
                 Tanulo obj = altSzemely as Tanulo;
-                stringObj = $"{obj.Name};{obj.SzulDatum};{obj.Nem};{obj.TanAtlag}";
+                stringObj = $"{obj.name};{obj.szulDatum};{obj.nem};{obj.tanAtlag}";
             }
             else
             {
                 Tanar obj = altSzemely as Tanar;
-                stringObj = $"{obj.Name};{obj.SzulDatum};{obj.Nem};{obj.foTantargy}";
+                stringObj = $"{obj.name} ; {obj.szulDatum} ; {obj.nem} ; {obj.foTantargy}";
             }
             writer.WriteLine(stringObj);  //kiírja stringobj változó tartalmát a megadott fájlba
             writer.Close();  //lezárja a fájlt
@@ -40,12 +40,12 @@ namespace Tanulok.Service
             {
                 T szemely=new T();
                 string[] data=line.Split(";");
-                szemely.Name = data[0];
-                szemely.SzulDatum = DateTime.Parse(data[1]);
-                szemely.Nem = data[2];
+                szemely.name = data[0];
+                szemely.szulDatum = DateTime.Parse(data[1]);
+                szemely.nem = data[2];
                 if (szemely is Tanulo)
                 {
-                    (szemely as Tanulo).TanAtlag = Double.Parse(data[3]);
+                    (szemely as Tanulo).tanAtlag = Double.Parse(data[3]);
                 }
                 else
                 {

@@ -2,9 +2,10 @@
 {
     public class Szemely
     {
-        public String Name { get; set; }
-        public DateTime SzulDatum { get; set; }
-        public String Nem { get; set; }
-        public Lakcim? lakcim { get; set; }
+        public long id { get;set; }
+        public String name { get; set; }
+        public DateTime szulDatum { get; set; }
+        public String nem { get; set; }
+        //public Lakcim? lakcim { get; set; }
     }
 }

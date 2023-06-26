@@ -14,6 +14,7 @@ public class Program
         builder.Services.AddSingleton<DapperContext>();
         builder.Services.AddSingleton<ITanuloRepository, TanuloRepository>();
         builder.Services.AddSingleton<ITanarRepository, TanarRepository>();
+        builder.Services.AddSingleton<ILakcimRepository, LakcimRepository>();
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();

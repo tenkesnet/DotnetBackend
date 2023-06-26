@@ -23,5 +23,18 @@ namespace Tanulok.Repository
             }
 
         }
+        public async Task<int> setTanulo(Tanulo tanulo)
+        {
+            int id = _context.connection.QuerySingle<int>("Insert into tanulok (name, szuldatum, nem, tanatlag) " +
+                                "values (@name, @szuldatum, @nem, @tanatlag);" +
+                                "select seq from sqlite_sequence WHERE name='tanulok';", new
+                                {
+                                    name = tanulo.tanAtlag,
+                                    szuldatum = tanulo.tanAtlag,
+                                    nem = tanulo.nem,
+                                    fotantargy = tanulo.tanAtlag
+                                });
+            return id;
+        }
     }
 }

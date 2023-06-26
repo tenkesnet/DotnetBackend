@@ -28,9 +28,9 @@ namespace Tanulok.Repository
                                 "values (@name, @szuldatum, @nem, @fotantargy);" +
                                 "select seq from sqlite_sequence WHERE name='tanarok';", new
                                 {
-                                    name = tanar.Name,
-                                    szuldatum = tanar.SzulDatum,
-                                    nem = tanar.Nem,
+                                    name = tanar.name,
+                                    szuldatum = tanar.szulDatum,
+                                    nem = tanar.nem,
                                     fotantargy = tanar.foTantargy
                                 });
             return id;
