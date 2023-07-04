@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Tanulok.Entity;
 public class Tanulo :Szemely
 {
-    public Double tanAtlag { get; set; }
+    public double tanAtlag { get; set; }
     public Lakcim lakcim { get; set; }
     //public Double TanulokOsszesitettAtlaga { get; set; }
     public Tanulo()

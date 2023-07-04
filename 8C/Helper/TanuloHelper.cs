@@ -1,22 +1,30 @@
 ﻿using Tanulok.Entity;
+using Tanulok.Repository;
 
 namespace Tanulok.Helper
 {
     public class TanuloHelper
     {
-        /*public static ValidationResult validateTanulo(Tanulo tanulo)
+        public static async Task<ValidationResult<Tanulo>> validateTanulo(Tanulo tanulo, ILakcimRepository lakcimRepository, ITanuloRepository tanuloRepository)
         {
-            ValidationResult validationResultSzemely = SzemelyHelper.validateSzemely(tanulo);
-            ValidationResult validationResultLakcim = LakcimHelper.validateLakcim(tanulo.lakcim);
-            ValidationResult result = new ValidationResult { Errors = new List<string>(), isValid = true };
+            ValidationResult<Szemely> validationResultSzemely = SzemelyHelper.validateSzemely(tanulo);
+            ValidationResult<Lakcim> validationResultLakcim = LakcimHelper.validateLakcim(tanulo.lakcim, lakcimRepository);
+            ValidationResult<Tanulo> result = new ValidationResult<Tanulo> { Errors = new List<string>(), isValid = true };
             result.Errors.AddRange(validationResultSzemely.Errors);
-            if (tanulo.tanAtlag == null || tanulo.tanAtlag ==0)
+            result.Errors.AddRange(validationResultLakcim.Errors);
+            if (validationResultSzemely.isValid == false || validationResultLakcim.isValid == false || result.isValid == false) 
+            {
+                result.isValid = false;            
+            }
+            if (tanulo.tanAtlag == null || tanulo.tanAtlag == 0)
             {
                 result.isValid = false;
                 result.Errors.Add("A tanuló átlagát kötelező megadni!");
+                return result;
             }
-            result.Errors.AddRange(validationResultLakcim.Errors);
+            result.result = tanulo;
+            result.result.lakcim = validationResultLakcim.result == null ? tanulo.lakcim : validationResultLakcim.result;
             return result;
-        }*/
+        }   
     }
 }

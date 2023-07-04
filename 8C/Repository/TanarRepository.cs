@@ -24,14 +24,15 @@ namespace Tanulok.Repository
 
         public async Task<int> setTanar(Tanar tanar)
         {
-            int id = _context.connection.QuerySingle<int>("Insert into tanarok (name, szuldatum, nem, fotantargy) " +
-                                "values (@name, @szuldatum, @nem, @fotantargy);" +
+            int id = _context.connection.QuerySingle<int>("Insert into tanarok (name, szuldatum, nem, fotantargy, lakcim_id) " +
+                                "values (@name, @szuldatum, @nem, @fotantargy, @lakcim_id);" +
                                 "select seq from sqlite_sequence WHERE name='tanarok';", new
                                 {
                                     name = tanar.name,
                                     szuldatum = tanar.szulDatum,
                                     nem = tanar.nem,
-                                    fotantargy = tanar.foTantargy
+                                    fotantargy = tanar.foTantargy,
+                                    lakcim_id = tanar.lakcim.id
                                 });
             return id;
         }

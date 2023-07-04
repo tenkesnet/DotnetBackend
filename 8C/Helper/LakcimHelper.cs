@@ -1,18 +1,26 @@
-﻿using System.Reflection.Metadata.Ecma335;
+﻿using SQLitePCL;
+using System.Reflection.Metadata.Ecma335;
 using Tanulok.Entity;
 using Tanulok.Repository;
 using Tanulok.Service;
 
 namespace Tanulok.Helper
 {
-    
-
     public class LakcimHelper
-    {    
-        public static ValidationResult<Tanar> validateLakcim(Lakcim lakcim)
+    {
+        public static ValidationResult<Lakcim> validateLakcim(Lakcim lakcim, ILakcimRepository lakcimRepository)
 
         {
-            ValidationResult<Tanar> resultLakcim = new ValidationResult<Tanar> { Errors = new List<string>(), isValid = true };
+            Lakcim lakcimVane = lakcimRepository.getLakcimByObject(lakcim);
+            
+            ValidationResult<Lakcim> resultLakcim = new ValidationResult<Lakcim> { Errors = new List<string>(), isValid = true };
+            if (lakcimVane != null)
+            {
+                resultLakcim.Errors.Add("Ilyen lakcím már létezik");
+                resultLakcim.result = lakcimVane;
+                resultLakcim.isValid = true;
+                return resultLakcim;
+            }
             if (lakcim.telepules == "" || lakcim.telepules == null)
             {
                 resultLakcim.isValid = false;
@@ -33,13 +41,8 @@ namespace Tanulok.Helper
                 resultLakcim.isValid = false;
                 resultLakcim.Errors.Add("A házszám nem lehet 0!");
             }
+            resultLakcim.result = lakcim;
             return resultLakcim;
-        }
-        public static int idLakcim(Lakcim lakcim)
-        {
-            int id = 0;
-            
-            return id;
         }
     }
 }

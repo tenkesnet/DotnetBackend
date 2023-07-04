@@ -10,36 +10,25 @@ namespace Tanulok.Helper
         public static async Task<ValidationResult<Tanar>> validateTanar(Tanar tanar, ILakcimRepository lakcimRepository,
             ITanarRepository tanarRepository)
         {
-            ValidationResult<Tanar> validationResultSzemely = SzemelyHelper.validateSzemely(tanar);
-            ValidationResult<Tanar> validationResultLakcim = LakcimHelper.validateLakcim(tanar.lakcim);
+            ValidationResult<Szemely> validationResultSzemely = SzemelyHelper.validateSzemely(tanar);
+            ValidationResult<Lakcim> validationResultLakcim = LakcimHelper.validateLakcim(tanar.lakcim,lakcimRepository);
             ValidationResult<Tanar> result = new ValidationResult<Tanar> { Errors = new List<string>(), isValid = true };
             result.Errors.AddRange(validationResultSzemely.Errors);
+            result.Errors.AddRange(validationResultLakcim.Errors);
+            if (validationResultSzemely.isValid == false || validationResultLakcim.isValid == false || result.isValid == false)
+            {
+                result.isValid = false;
+            }
             if (tanar.foTantargy == null || tanar.foTantargy == "")
             {
                 result.isValid = false;
                 result.Errors.Add("A főtantárgyat kötelező megadni!");
+                return result;
             }
-            result.Errors.AddRange(validationResultLakcim.Errors);
-            if (result.isValid)
-            {
-                Lakcim lakcim = lakcimRepository.getLakcimByObject(tanar.lakcim);
-                if (lakcim == null)
-                {
-                    long lakcimId = await lakcimRepository.setLakcim(tanar.lakcim);
-                    long tanarId = await tanarRepository.setTanar(tanar);
-                    tanar.id = tanarId;
-                    tanar.lakcim.id = lakcimId;
-                    result.result = tanar;
-                }
-                else
-                {
-                    long tanarId = await tanarRepository.setTanar(tanar);
-                    tanar.id = tanarId;
-                    tanar.lakcim = lakcim;
-                    result.result = tanar;
-                }
-            }
+            result.result = tanar;
+            result.result.lakcim=validationResultLakcim.result==null? tanar.lakcim:validationResultLakcim.result;
             return result;
+
         }
     }
 } 

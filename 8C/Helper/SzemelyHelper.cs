@@ -4,9 +4,9 @@ namespace Tanulok.Helper
 {
     public class SzemelyHelper
     {
-        public static ValidationResult<Tanar> validateSzemely(Szemely szemely)
+        public static ValidationResult<Szemely> validateSzemely(Szemely szemely)
         {
-            ValidationResult<Tanar> result = new ValidationResult<Tanar> { Errors = new List<string>(), isValid = true };
+            ValidationResult<Szemely> result = new ValidationResult<Szemely> { Errors = new List<string>(), isValid = true };
             if (szemely.name == "" || szemely.name == null)
             {
                 result.isValid = false;

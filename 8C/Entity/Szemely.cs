@@ -6,6 +6,5 @@
         public String name { get; set; }
         public DateTime szulDatum { get; set; }
         public String nem { get; set; }
-        //public Lakcim? lakcim { get; set; }
     }
 }
