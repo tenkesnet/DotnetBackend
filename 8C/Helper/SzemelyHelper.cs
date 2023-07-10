@@ -1,4 +1,5 @@
 ﻿using Tanulok.Entity;
+using Tanulok.Repository;
 
 namespace Tanulok.Helper
 {

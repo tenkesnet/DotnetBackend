@@ -6,5 +6,6 @@ namespace Tanulok.Repository
     {
         public Task<IEnumerable<Tanulo>> GetTanulok();
         public Task<int> setTanulo(Tanulo tanulo);
+        public Tanulo getTanuloByObject(Tanulo tanulo);
     }
 }

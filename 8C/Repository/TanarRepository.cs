@@ -14,12 +14,16 @@ namespace Tanulok.Repository
         }
         public async Task<IEnumerable<Tanar>> GetTanarok()
         {
-                var query = "SELECT * FROM tanarok";
-                using (var connection = _context.CreateConnection())
+            var query = "select l.*,t.* from tanarok t JOIN lakcim l on t.lakcim_id=l.id";
+            using (var connection = _context.CreateConnection())
+            {
+                var tanarok = await connection.QueryAsync<Lakcim, Tanar, Tanar>(query, (l, t) =>
                 {
-                    var companies = await connection.QueryAsync<Tanar>(query);
-                    return companies.ToList();
-                }
+                    t.lakcim = l;
+                    return t;
+                });
+                return tanarok;
+            }
         }
 
         public async Task<int> setTanar(Tanar tanar)
@@ -35,6 +39,19 @@ namespace Tanulok.Repository
                                     lakcim_id = tanar.lakcim.id
                                 });
             return id;
+        }
+        public Tanar getTanarByObject(Tanar tanar)
+        {
+            Tanar result = _context.connection.QueryFirstOrDefault<Tanar>("select * from tanarok where name=@name " +
+                "and szuldatum=@szuldatum and nem=@nem and fotantargy=@fotantargy;",
+                new
+                {
+                    name = tanar.name,
+                    szuldatum = tanar.szulDatum,
+                    nem = tanar.nem,
+                    fotantargy = tanar.foTantargy,
+                });
+            return result;
         }
     }
 }

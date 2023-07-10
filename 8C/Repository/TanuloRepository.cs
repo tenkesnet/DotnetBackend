@@ -3,14 +3,14 @@ using Tanulok.Entity;
 
 namespace Tanulok.Repository
 {
-    public class TanuloRepository :ITanuloRepository
+    public class TanuloRepository : ITanuloRepository
     {
         private readonly DapperContext _context;
         public TanuloRepository(DapperContext context)
         {
             _context = context;
         }
-    
+
 
         public async Task<IEnumerable<Tanulo>> GetTanulok()
 
@@ -20,7 +20,7 @@ namespace Tanulok.Repository
             {
                 var tanulok = await connection.QueryAsync<Lakcim, Tanulo, Tanulo>(query, (l, t) =>
                 {
-                    t.lakcim=l;
+                    t.lakcim = l;
                     return t;
                 });
                 return tanulok;
@@ -37,9 +37,22 @@ namespace Tanulok.Repository
                                     szuldatum = tanulo.szulDatum,
                                     nem = tanulo.nem,
                                     tanatlag = tanulo.tanAtlag,
-                                    lakcim_id=tanulo.lakcim.id
+                                    lakcim_id = tanulo.lakcim.id
                                 });
             return id;
         }
+        public Tanulo getTanuloByObject(Tanulo tanulo)
+        {
+            Tanulo result = _context.connection.QueryFirstOrDefault<Tanulo>("select * from tanulok where name=@name " +
+                "and szuldatum=@szuldatum and nem=@nem and tanatlag=@tanatlag;",
+                new
+                {
+                    name = tanulo.name,
+                    szuldatum = tanulo.szulDatum,
+                    nem = tanulo.nem,
+                    tanatlag = tanulo.tanAtlag,
+                });
+            return result;
+         }
     }
 }

@@ -6,5 +6,7 @@ namespace Tanulok.Repository
     {
         public Task<IEnumerable<Tanar>> GetTanarok();
         public Task<int> setTanar(Tanar tanar);
+
+        public Tanar getTanarByObject(Tanar tanar);
     }
 }
