@@ -1,4 +1,6 @@
 
+using Microsoft.EntityFrameworkCore;
+using Tanulok.Models;
 using Tanulok.Repository;
 
 namespace Tanulok;
@@ -11,10 +13,13 @@ public class Program
 
         // Add services to the container.
 
-        builder.Services.AddSingleton<DapperContext>();
-        builder.Services.AddSingleton<ITanuloRepository, TanuloRepository>();
-        builder.Services.AddSingleton<ITanarRepository, TanarRepository>();
-        builder.Services.AddSingleton<ILakcimRepository, LakcimRepository>();
+        //builder.Services.AddSingleton<DapperContext>();
+        builder.Services.AddDbContext<IskolaContext>(
+            options => options.UseNpgsql("name=ConnectionStrings:SqlConnection"));
+        //builder.Services.AddSingleton<ITanuloRepository, TanuloRepository>();
+        //builder.Services.AddSingleton<ITanarRepository, TanarRepository>();
+        //builder.Services.AddSingleton<ILakcimRepository, LakcimRepository>();
+        builder.Services.AddSingleton<IAlkalmazottRepository, AlkalmazottEFRepository>();
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();

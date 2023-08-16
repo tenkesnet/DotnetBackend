@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Tanulok.Entity;
+using Tanulok.Models;
 
 namespace Tanulok.Repository
 {
@@ -16,7 +17,7 @@ namespace Tanulok.Repository
 
         {
             var query = "select l.*,t.* from tanulok t JOIN lakcim l on t.lakcim_id=l.id";
-            using (var connection = _context.CreateConnection())
+            /*using (var connection = _context.CreateConnection())
             {
                 var tanulok = await connection.QueryAsync<Lakcim, Tanulo, Tanulo>(query, (l, t) =>
                 {
@@ -24,7 +25,8 @@ namespace Tanulok.Repository
                     return t;
                 });
                 return tanulok;
-            }
+            }*/
+            return null;
 
         }
         public async Task<int> setTanulo(Tanulo tanulo)
