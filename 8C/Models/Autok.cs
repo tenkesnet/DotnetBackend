@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Tanulok.Models;
 
@@ -11,8 +12,6 @@ public partial class Autok
 
     public int TipusokId { get; set; }
 
-    public int AutoCsopId { get; set; }
-
     public DateOnly? VasarlasDatuma { get; set; }
 
     public double? Ar { get; set; }
@@ -23,17 +22,11 @@ public partial class Autok
 
     public string? Allapot { get; set; }
 
-    public int ReszlegId { get; set; }
-
     public int AlkalmazottId { get; set; }
-
+    [JsonIgnore]
     public virtual Alkalmazott Alkalmazott { get; set; } = null!;
 
-    public virtual AutoCsop AutoCsop { get; set; } = null!;
-
     public virtual ICollection<Rendele> Rendeles { get; set; } = new List<Rendele>();
-
-    public virtual Reszleg Reszleg { get; set; } = null!;
 
     public virtual Tipusok Tipusok { get; set; } = null!;
 }

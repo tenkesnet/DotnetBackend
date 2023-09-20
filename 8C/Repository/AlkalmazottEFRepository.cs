@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 using Tanulok.Entity;
 using Tanulok.Models;
@@ -13,9 +14,14 @@ namespace Tanulok.Repository
         {
             _context = context;
         }
-        public async Task<IEnumerable<Alkalmazott>> GetAlkalmazott()
+        public async Task<IEnumerable<Alkalmazott>> GetAlkalmazottbyAuto()
         {
-            return _context.Alkalmazotts.ToList();
+            return _context.Alkalmazotts.Include(a=>a.Autoks).ToList();
+
+        }
+        public async Task<IEnumerable<Alkalmazott>> GetAlkalmazottbyReszleg()
+        {
+            return _context.Alkalmazotts.Include(a=>a.Reszleg).ToList();
 
         }
 

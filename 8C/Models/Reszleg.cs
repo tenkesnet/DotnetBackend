@@ -14,6 +14,4 @@ public partial class Reszleg
     public string? ReszlegCim { get; set; }
 
     public virtual ICollection<Alkalmazott> Alkalmazotts { get; set; } = new List<Alkalmazott>();
-
-    public virtual ICollection<Autok> Autoks { get; set; } = new List<Autok>();
 }

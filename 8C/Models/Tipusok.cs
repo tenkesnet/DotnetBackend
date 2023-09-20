@@ -18,6 +18,4 @@ public partial class Tipusok
     public virtual AutoCsop AutoCsop { get; set; } = null!;
 
     public virtual ICollection<Autok> Autoks { get; set; } = new List<Autok>();
-
-    public virtual ICollection<Rendele> Rendeles { get; set; } = new List<Rendele>();
 }

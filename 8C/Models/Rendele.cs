@@ -21,8 +21,6 @@ public partial class Rendele
 
     public int RendszamId { get; set; }
 
-    public int TipusokId { get; set; }
-
     public long? KmKezdet { get; set; }
 
     public long? KmVeg { get; set; }
@@ -32,8 +30,6 @@ public partial class Rendele
     public string? Fizetes { get; set; }
 
     public virtual Autok Rendszam { get; set; } = null!;
-
-    public virtual Tipusok Tipusok { get; set; } = null!;
 
     public virtual Ugyfelek Ugyfelek { get; set; } = null!;
 }

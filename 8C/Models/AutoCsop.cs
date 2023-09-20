@@ -13,7 +13,5 @@ public partial class AutoCsop
 
     public long? NapiDij { get; set; }
 
-    public virtual ICollection<Autok> Autoks { get; set; } = new List<Autok>();
-
     public virtual ICollection<Tipusok> Tipusoks { get; set; } = new List<Tipusok>();
 }

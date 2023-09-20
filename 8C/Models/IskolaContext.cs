@@ -90,36 +90,20 @@ public partial class IskolaContext : DbContext
                 .HasMaxLength(1)
                 .HasColumnName("allapot");
             entity.Property(e => e.Ar).HasColumnName("ar");
-            entity.Property(e => e.AutoCsopId)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("auto_csop_id");
             entity.Property(e => e.FutottKm).HasColumnName("futott_km");
             entity.Property(e => e.Rendszam)
                 .HasMaxLength(7)
                 .HasColumnName("rendszam");
-            entity.Property(e => e.ReszlegId)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("reszleg_id");
             entity.Property(e => e.TipusokId)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("tipusok_id");
             entity.Property(e => e.UtSzerviz).HasColumnName("ut_szerviz");
             entity.Property(e => e.VasarlasDatuma).HasColumnName("vasarlas_datuma");
 
-            entity.HasOne(d => d.Alkalmazott).WithMany(p => p.Autoks)
+            /*entity.HasOne(d => d.Alkalmazott).WithMany(p => p.Autoks)
                 .HasForeignKey(d => d.AlkalmazottId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("autok_alkalmazott_id_fkey");
-
-            entity.HasOne(d => d.AutoCsop).WithMany(p => p.Autoks)
-                .HasForeignKey(d => d.AutoCsopId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("autok_auto_csop_id_fkey");
-
-            entity.HasOne(d => d.Reszleg).WithMany(p => p.Autoks)
-                .HasForeignKey(d => d.ReszlegId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("autok_reszleg_id_fkey");
+                .HasConstraintName("autok_alkalmazott_id_fkey");*/
 
             entity.HasOne(d => d.Tipusok).WithMany(p => p.Autoks)
                 .HasForeignKey(d => d.TipusokId)
@@ -152,9 +136,6 @@ public partial class IskolaContext : DbContext
             entity.Property(e => e.RendszamId)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("rendszam_id");
-            entity.Property(e => e.TipusokId)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("tipusok_id");
             entity.Property(e => e.UgyfelekId)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("ugyfelek_id");
@@ -163,11 +144,6 @@ public partial class IskolaContext : DbContext
                 .HasForeignKey(d => d.RendszamId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("rendeles_rendszam_id_fkey");
-
-            entity.HasOne(d => d.Tipusok).WithMany(p => p.Rendeles)
-                .HasForeignKey(d => d.TipusokId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("rendeles_tipusok_id_fkey");
 
             entity.HasOne(d => d.Ugyfelek).WithMany(p => p.Rendeles)
                 .HasForeignKey(d => d.UgyfelekId)
