@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Macska", "Macska\Macska.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intezmeny", "Intezmeny\Intezmeny.csproj", "{F72713CF-B8EA-4489-96C4-165E9FBD1C22}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kresz", "Kresz\Kresz.csproj", "{D38AF4F3-6F61-4871-AD81-2B6FBF5AD377}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{F72713CF-B8EA-4489-96C4-165E9FBD1C22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F72713CF-B8EA-4489-96C4-165E9FBD1C22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F72713CF-B8EA-4489-96C4-165E9FBD1C22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D38AF4F3-6F61-4871-AD81-2B6FBF5AD377}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D38AF4F3-6F61-4871-AD81-2B6FBF5AD377}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D38AF4F3-6F61-4871-AD81-2B6FBF5AD377}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D38AF4F3-6F61-4871-AD81-2B6FBF5AD377}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
