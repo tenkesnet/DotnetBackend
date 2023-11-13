@@ -18,7 +18,7 @@ namespace Kresz
         public abstract bool gyorshajtottE(int sebessegKorlat);
         public override string ToString()
         {
-            return _rendszam + " - " + _aktualisSebesseg;
+            return "Rendszám: " + _rendszam + " - Aktuális sebesség: " + _aktualisSebesseg;
         }
     }
 }

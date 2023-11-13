@@ -16,8 +16,12 @@ namespace Macska
             Macska macska2 = new Macska("Whiskas", 4.2);
             Console.WriteLine(macska1.ToString());
             Console.WriteLine(macska2.ToString());
-            IntezmenyProgram program1=new IntezmenyProgram();
+            //IntezmenyProgram program1=new IntezmenyProgram();
             int i;
+            List<int> golok = new List<int>() { 13,20,8,23,10,9};
+            Console.WriteLine("Átlag: "+ golok.Average());
+            List<Macska> macskak = new List<Macska>() { macska1, macska2 };
+            Console.WriteLine("Átlag: " + macskak.Average(macska=>macska._suly));
 
             if (macska1.Eszik(0.17))
             {
@@ -49,7 +53,7 @@ namespace Macska
             Console.WriteLine(a);
             Console.ReadLine();
         }
-        public void osszead(int a, int b, Szoveg c)
+        internal void osszead(int a, int b, Szoveg c)
         {
             c.text = Convert.ToString(a + b);
             a = a + b;

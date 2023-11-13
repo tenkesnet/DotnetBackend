@@ -9,10 +9,9 @@ namespace Kresz
     public class Robogo : Jarmu, IKisGepjarmu
     {
         private int _maxSebesseg { get; set; }
-        public Robogo (int aktualisSebesseg, string rendszam, int maxSebesseg)
+        public Robogo  (int aktualisSebesseg, string rendszam, int maxSebesseg) :base(aktualisSebesseg, rendszam)
         {
             _maxSebesseg = maxSebesseg;
-            _aktualisSebesseg=aktualisSebesseg;
         }
         public override bool gyorshajtottE(int sebessegKorlat)
         {
@@ -32,7 +31,7 @@ namespace Kresz
         }
         public override string ToString()
         {
-            return "Robogó: " + this.ToString;
+            return "Robogó: " + base.ToString();
         }
     }
 }

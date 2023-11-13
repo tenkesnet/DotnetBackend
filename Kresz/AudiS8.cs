@@ -10,10 +10,9 @@ namespace Kresz
     public class AudiS8 :Jarmu
     {
         private bool _lezerBlokkolo { get; set; }
-        public AudiS8(int aktualisSebesseg, string rendszam, bool lezerBlokkolo)
+        public AudiS8(int aktualisSebesseg, string rendszam, bool lezerBlokkolo) : base(aktualisSebesseg, rendszam)
         {
             _lezerBlokkolo = lezerBlokkolo;
-            _aktualisSebesseg = aktualisSebesseg;
         }
         public override bool gyorshajtottE(int sebessegKorlat)
         {
@@ -31,7 +30,7 @@ namespace Kresz
         }
         public override string ToString()
         {
-            return "Audi: " + this.ToString;
+            return "Audi: " + base.ToString();
         }
     }
 }
