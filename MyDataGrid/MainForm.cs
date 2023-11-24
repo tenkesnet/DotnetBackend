@@ -1,4 +1,6 @@
-﻿using NPOI.HSSF.UserModel;
+﻿using ADODB;
+using Dapper;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula.PTG;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -12,6 +14,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,10 +27,11 @@ namespace MyDataGrid
         string fileName;
         DataTable dtExcelTable;
         DataRow dr;
-        List <Tabella> tabellak = new List<Tabella>();
+        List<Sheet> tabellak = new List<Sheet>();
         TabControl tabControlTabellak = new TabControl();
         List<TabellaSor> tabellaSorLista;
-        List<List<TabellaSor>> tabellaSorListaLista=new List<List<TabellaSor>>();
+        List<List<TabellaSor>> tabellaSorListaLista = new List<List<TabellaSor>>();
+        DapperContext context= new DapperContext();
         public MainForm()
         {
             InitializeComponent();
@@ -40,12 +44,12 @@ namespace MyDataGrid
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 fileName = openFileDialog1.FileName;
-                List<Tabella> tabellak=getSheetNumbers();
-                foreach (Tabella tabella in tabellak)
+                List<Sheet> tabellak = getSheetNumbers();
+                foreach (Sheet tabella in tabellak)
                 {
                     tabella.dtg = new DataGridView();
                     tabella.dtg.Size = new Size(800, 400);
-                    tabella.dtg.Location= new Point(10,10);
+                    tabella.dtg.Location = new Point(10, 10);
 
 
                     tabella.dtg.Name = tabella.sheetName;
@@ -53,13 +57,13 @@ namespace MyDataGrid
                     page.Controls.Add(tabella.dtg);
                     tabControlTabellak.TabPages.Add(page);
 
-                    if (tabella !=null)
+                    if (tabella != null)
                         GetRequestsDataFromExcel(tabella);
 
                 }
             }
         }
-        private List<Tabella> getSheetNumbers()
+        private List<Sheet> getSheetNumbers()
         {
             var fileExtension = Path.GetExtension(fileName);
             string sheetName;
@@ -74,7 +78,7 @@ namespace MyDataGrid
                         {
                             sheetName = wb.GetSheetAt(i).SheetName;
                             sheet = (XSSFSheet)wb.GetSheet(sheetName);
-                            tabellak.Add(new Tabella(sheetName, sheet));
+                            tabellak.Add(new Sheet(sheetName, sheet));
                         }
                         return tabellak;
                     }
@@ -87,7 +91,7 @@ namespace MyDataGrid
                         {
                             sheetName = wb.GetSheetAt(i).SheetName;
                             sheet = (HSSFSheet)wb.GetSheet(sheetName);
-                            tabellak.Add(new Tabella(sheetName, sheet));
+                            tabellak.Add(new Sheet(sheetName, sheet));
                         }
                         return tabellak;
                     }
@@ -96,13 +100,13 @@ namespace MyDataGrid
             return null;
         }
 
-        private void GetRequestsDataFromExcel(Tabella tabella)
+        private void GetRequestsDataFromExcel(Sheet tabella)
         {
             var sh = tabella.sheet;
             try
             {
                 dtExcelTable = new DataTable();
-                tabellaSorLista=tabella.tabellaSorok;
+                tabellaSorLista = tabella.tabellaSorok;
                 dtExcelTable.Rows.Clear();
                 dtExcelTable.Columns.Clear();
                 var headerRow = sh.GetRow(0);
@@ -133,7 +137,7 @@ namespace MyDataGrid
                                     dr[j] = string.Empty;
                                     break;
                             }
-                        switch(j)
+                        switch (j)
                         {
                             case 0:
                                 tabellaSor.helyezes = Convert.ToInt16(dr[j]);
@@ -177,7 +181,7 @@ namespace MyDataGrid
                 statisztika(0);
                 tabella.dtg.DataSource = dtExcelTable;
                 int q = 0;
-                while (q<tabella.dtg.Columns.Count)                 //A DataGridView-k oszlopszélességét állítja
+                while (q < tabella.dtg.Columns.Count)                 //A DataGridView-k oszlopszélességét állítja
                 {
                     tabella.dtg.Columns[q].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                     q++;
@@ -189,7 +193,7 @@ namespace MyDataGrid
             }
         }
         private void statisztika(int sti)     //A megkapott index a megyét adja, azaz egyúttal a megyei tabellák listájának indexét
-        {                                       
+        {
             string merkozosenkentiGolatlag;
             double gol;
             double lottgol;
@@ -220,5 +224,52 @@ namespace MyDataGrid
         {
             statisztika(tabControlTabellak.SelectedIndex);   //A kiválasztott TabPage indexét adja át a statisztikát számoló metódusnak
         }
+
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void button2_ClickAsync(object sender, EventArgs e)
+        {
+            if (fileName==null)
+                return;
+            var sql = "INSERT INTO excel (excel_file_name) VALUES (@excel_file_name) returning id";
+            var excelFileNameParameter = new { excel_file_name = fileName };
+            var excelId= context.connection.QuerySingle<int>(sql, excelFileNameParameter);
+
+            foreach ( var sheet in tabellak ) {
+                sql = "INSERT INTO sheet_name (excel_file_name_id, sheet_name) VALUES (@excel_id, @sheet_name) returning id";
+                var excelSheetNameParameter = new { excel_id=excelId, sheet_name=sheet.sheetName};
+                var excelSheetNameId = context.connection.QuerySingle<int>(sql, excelSheetNameParameter);
+                foreach (var row in sheet.tabellaSorok)
+                {
+                    sql = "INSERT INTO sheet_row (helyezes, csapat, osszes_merkozes, gyozelem, dontetlen, vereseg," +
+                    "lott_golok, kapott_golok, golkulonbseg, pontszam, sheet_name_id  ) VALUES (@helyezes, @csapat," +
+                    "@osszes_merkozes, @gyozelem, @dontetlen, @vereseg, @lott_golok, @kapott_golok, @golkulonbseg, @pontszam," +
+                    "@sheet_name_id)";
+                    var rowParameter = new
+                    {
+                        helyezes = row.helyezes,
+                        csapat = row.csapat,
+                        osszes_merkozes = row.osszesMerkozes,
+                        gyozelem = row.gyozelem,
+                        dontetlen = row.dontetlen,
+                        vereseg = row.vereseg,
+                        lott_golok = row.lottGolok,
+                        kapott_golok = row.kapottGolok,
+                        golkulonbseg = row.golKulonbseg,
+                        pontszam = row.pontszam,
+                        sheet_name_id = excelSheetNameId
+                    };
+                    context.connection.Execute(sql, rowParameter);
+                }
+            }
+            
+
+        }
+            
+    
     }
 }
+
