@@ -11,15 +11,15 @@ namespace MyDataGrid
 
         public int helyezes;
         public string csapat;
-        public int osszesMerkozes;
+        public int osszes_merkozes;
         public int gyozelem;
         public int dontetlen;
         public int vereseg;
-        public int lottGolok;
-        public int kapottGolok;
-        public int golKulonbseg;
+        public int lott_golok;
+        public int kapott_golok;
+        public int golkulonbseg;
         public int pontszam;
-
+        public int sheet_name_id;
         public TabellaSor()
         {
             

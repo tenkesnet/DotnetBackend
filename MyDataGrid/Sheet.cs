@@ -11,7 +11,6 @@ namespace MyDataGrid
     public class Sheet
     {
         public List<TabellaSor> tabellaSorok;
-        //public List<List<TabellaSor>> tabellaSorListList;
         public string sheetName;
         public DataGridView dtg { get; set; }
         public ISheet sheet { get; set; }
@@ -21,6 +20,12 @@ namespace MyDataGrid
             sheetName = sName;
             this.sheet = sheet;
         }
-      
+        public Sheet(string sName)
+        {
+            tabellaSorok = new List<TabellaSor>();
+            sheetName = sName;
+            //this.sheet = sheet;
+        }
+
     }
 }
