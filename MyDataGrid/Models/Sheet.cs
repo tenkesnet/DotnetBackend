@@ -1,6 +1,7 @@
 ﻿using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,22 +11,30 @@ namespace MyDataGrid
 {
     public class Sheet
     {
-        public List<TabellaSor> tabellaSorok;
+        public List<TableCell> tableSor;
+        public List<List<TableCell>> tableSorok;
+        public List<SheetColumn> sheetColumns { get; set; }
+
         public string sheetName;
         public DataGridView dtg { get; set; }
         public ISheet sheet { get; set; }
+        public DataTable dataTable   { get; set; }
+
         public  Sheet (string sName, ISheet sheet)
         {
-            tabellaSorok = new List<TabellaSor>();
+            tableSor = new List<TableCell>();
+            sheetColumns = new List<SheetColumn>();
             sheetName = sName;
             this.sheet = sheet;
         }
         public Sheet(string sName)
         {
-            tabellaSorok = new List<TabellaSor>();
+            tableSor = new List<TableCell>();
+            sheetColumns = new List<SheetColumn>();
             sheetName = sName;
             //this.sheet = sheet;
         }
+
 
     }
 }
