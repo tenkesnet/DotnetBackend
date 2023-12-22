@@ -1,4 +1,5 @@
-﻿using NPOI.SS.UserModel;
+﻿using MyDataGrid.Models;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,10 +10,10 @@ using System.Windows.Forms;
 
 namespace MyDataGrid
 {
-    public class Sheet
+    public class TableSheet
     {
+        public List<TableRow> sorok { get; set; }
         public List<TableCell> tableSor;
-        public List<List<TableCell>> tableSorok;
         public List<SheetColumn> sheetColumns { get; set; }
 
         public string sheetName;
@@ -20,21 +21,25 @@ namespace MyDataGrid
         public ISheet sheet { get; set; }
         public DataTable dataTable   { get; set; }
 
-        public  Sheet (string sName, ISheet sheet)
+        public  TableSheet (string sName, ISheet sheet)
         {
-            tableSor = new List<TableCell>();
+            sorok = new List<TableRow>();
             sheetColumns = new List<SheetColumn>();
             sheetName = sName;
             this.sheet = sheet;
         }
-        public Sheet(string sName)
+        public TableSheet(string sName)
         {
-            tableSor = new List<TableCell>();
+            sorok = new List<TableRow>();
             sheetColumns = new List<SheetColumn>();
             sheetName = sName;
             //this.sheet = sheet;
         }
-
+        public TableSheet()
+        {
+            sorok = new List<TableRow>();
+            sheetColumns= new List<SheetColumn>();
+        }
 
     }
 }

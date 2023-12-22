@@ -1,12 +1,15 @@
 ﻿using Azure;
 using Dapper;
 using MathNet.Numerics;
+using MathNet.Numerics.Distributions;
 using Microsoft.Ajax.Utilities;
 using Microsoft.Identity.Client;
 using Microsoft.JScript;
+using MyDataGrid.Models;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
+using NPOI.XSSF.Streaming.Values;
 using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
@@ -20,21 +23,22 @@ using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Npgsql.Replication.PgOutput.Messages.RelationMessage;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using ComboBox = System.Windows.Forms.ComboBox;
 using Convert = System.Convert;
+
 
 namespace MyDataGrid.Services
 {
     public class Procedures
     {
 
-        public List<Sheet> tabellak = new List<Sheet>();
+        public List<TableSheet> tabellak = new List<TableSheet>();
         public string filePath;
-        public DataTable dtExcelTable;
         public DataRow dr;
         public List<TableCell> tabellaSorLista = new List<TableCell>();
-        ComboBox cmbBetoltAdatbazisbol = new ComboBox();
+
         public DapperContext context = new DapperContext();
 
         Form formTemp;
@@ -56,7 +60,7 @@ namespace MyDataGrid.Services
             tabCtrl.Height = 500;
             tabCtrl.Width = 930;
             tabCtrl.Location = new Point(20, 80);
-            foreach (Sheet tabella in tabellak)
+            foreach (TableSheet tabella in tabellak)
             {
                 tabella.dtg = new DataGridView();
                 tabella.dtg.Size = new Size(800, 400);
@@ -66,17 +70,17 @@ namespace MyDataGrid.Services
                 page.Controls.Add(tabella.dtg);
                 tabCtrl.TabPages.Add(page);
                 tabCtrl.Visible=true;
-                if (tabella != null)
-                    GetRequestsDataFromExcel(tabella);
+                //if (tabella != null)
+                    //GetRequestsDataFromExcel(tabella);
             }
             return tabCtrl;
         }
         
-        public List<Sheet> getSheetNumbers(string filePath)
+        public List<TableSheet> getSheetNumbers(string filePath)
         {
             var fileExtension = Path.GetExtension(filePath);
             string sheetName;
-            List<Sheet> result = new List<Sheet>();
+            List<TableSheet> result = new List<TableSheet>();
             ISheet sheet = null;
             switch (fileExtension)
             {
@@ -88,7 +92,7 @@ namespace MyDataGrid.Services
                         {
                             sheetName = wb.GetSheetAt(i).SheetName;
                             sheet = (XSSFSheet)wb.GetSheet(sheetName);
-                            result.Add(new Sheet(sheetName, sheet));
+                            result.Add(new TableSheet(sheetName, sheet));
                         }
                         return  result;
                     }
@@ -101,7 +105,7 @@ namespace MyDataGrid.Services
                         {
                             sheetName = wb.GetSheetAt(i).SheetName;
                             sheet = (HSSFSheet)wb.GetSheet(sheetName);
-                            result.Add(new Sheet(sheetName, sheet));
+                            result.Add(new TableSheet(sheetName, sheet));
                         }
                         return result;
                     }
@@ -109,25 +113,26 @@ namespace MyDataGrid.Services
             }
             return null;
         }
-        public void GetRequestsDataFromExcel(Sheet tabella)
+        /*public void GetRequestsDataFromExcel(TableSheet tabella)
         {
+            DataTable dataTable = new DataTable();
             var sh = tabella.sheet;
             try
             {
-                dtExcelTable = new DataTable();
-                tabellaSorLista = tabella.tableSor;
-                dtExcelTable.Rows.Clear();
-                dtExcelTable.Columns.Clear();
+                dataTable = new DataTable();
+                //tabellaSorLista = tabella.tableSor;
+                dataTable.Rows.Clear();
+                dataTable.Columns.Clear();
                 var headerRow = sh.GetRow(0);
                 int colCount = headerRow.LastCellNum;
                 for (var c = 0; c < colCount; c++)
-                    dtExcelTable.Columns.Add(headerRow.GetCell(c).ToString());
+                    dataTable.Columns.Add(headerRow.GetCell(c).ToString());
                 var i = 1;
                 var currentRow = sh.GetRow(i);
                 while (currentRow != null)
                 {
                     TableCell tabellaSor = new TableCell();
-                    dr = dtExcelTable.NewRow();
+                    dr = dataTable.NewRow();
 
                     for (var j = 0; j < currentRow.Cells.Count; j++)
                     {
@@ -148,7 +153,7 @@ namespace MyDataGrid.Services
                                     break;
                             }
                         
-                        switch (j)
+                        /*switch (j)
                         {
                             case 0:
                                 tabellaSor.helyezes = Convert.ToInt16(dr[j]);
@@ -182,15 +187,16 @@ namespace MyDataGrid.Services
                                 break;
                         }
                     }
-                    dtExcelTable.Rows.Add(dr);
-                    tabellaSorLista.Add(tabellaSor);
+                    dataTable.Rows.Add(dr);
+                    tabella.Add(tabellaSor);
+                    tabella.
                     i++;
                     currentRow = sh.GetRow(i);
                 }
 
                 tabella.tableSor = tabellaSorLista;
                 //statisztika(0);
-                tabella.dtg.DataSource = dtExcelTable;
+                tabella.dtg.DataSource = dataTable;
                 int q = 0;
                 while (q < tabella.dtg.Columns.Count)                 //A DataGridView-k oszlopszélességét állítja
                 {
@@ -202,10 +208,10 @@ namespace MyDataGrid.Services
             {
                 throw;
             }
-        }
+        }*/
 
 
-        public double[] statisztika(int sti)     //A megkapott index a megyét adja, azaz egyúttal a megyei tabellák listájának indexét
+       /* public double[] statisztika(int sti)     //A megkapott index a megyét adja, azaz egyúttal a megyei tabellák listájának indexét
         {
             double[] tomb = new double [3];
             double merkozosenkentiGolatlag;
@@ -225,7 +231,7 @@ namespace MyDataGrid.Services
             tomb[1] = merkozesSzam;
             tomb[2] = merkozosenkentiGolatlag;
             return tomb;
-        }
+        }*/
         public void insertToDatabase(string filepath)
         {
             var sql = "INSERT INTO excel (excel_file_name) VALUES (@excel_file_name) returning id";
@@ -252,7 +258,7 @@ namespace MyDataGrid.Services
                     "lott_golok, kapott_golok, golkulonbseg, pontszam, sheet_name_id  ) VALUES (@helyezes, @csapat," +
                     "@osszes_merkozes, @gyozelem, @dontetlen, @vereseg, @lott_golok, @kapott_golok, @golkulonbseg, @pontszam," +
                     "@sheet_name_id)";
-                    var rowParameter = new
+                    /*var rowParameter = new
                     {
                         helyezes = row.helyezes,
                         csapat = row.csapat,
@@ -266,12 +272,13 @@ namespace MyDataGrid.Services
                         pontszam = row.pontszam,
                         sheet_name_id = excelSheetNameId
                     };
-                    context.connection.Execute(sql, rowParameter);
+                    context.connection.Execute(sql, rowParameter);*/
                 }
             }
         }
         public ComboBox cmbBetolt()
         {
+            ComboBox cmbBetoltAdatbazisbol = new ComboBox();
             cmbBetoltAdatbazisbol.Location = new Point(700, 45);
             cmbBetoltAdatbazisbol.Height = 35;
             cmbBetoltAdatbazisbol.Width = 100;
@@ -283,14 +290,13 @@ namespace MyDataGrid.Services
                     {
                         id = i,
                     });
-                string fileName = Path.GetFileNameWithoutExtension(result);
+                string fileName = result;
                 cmbBetoltAdatbazisbol.Items.Add(fileName);
                 cmbBetoltAdatbazisbol.SelectedIndex = 0;
             }
-            
             return cmbBetoltAdatbazisbol;
         }
-        public TabControl cmbSelectedIndexChanged(TabControl tabControl)
+        public TabControl cmbSelectedIndexChanged(TabControl tabControl, ComboBox cmbBetoltAdatbazisbol)
         {
             tabControl.TabPages.Clear();
             tabControl.Height = 500;
@@ -314,7 +320,7 @@ namespace MyDataGrid.Services
                         id = megye_name.id,
 
                     });
-                Sheet tabellaSheet = new Sheet(megye);
+                TableSheet tabellaSheet = new TableSheet(megye);
                 tabellaSheet.dtg = new DataGridView();
                 tabellaSheet.dtg.Size = new Size(800, 400);
                 tabellaSheet.dtg.Location = new Point(10, 10);
@@ -353,7 +359,7 @@ namespace MyDataGrid.Services
                         {
                             id = csapat.id,
                         });
-                    if (result.sheet_name_id == megye_name.id)
+                    /*if (result.sheet_name_id == megye_name.id)
                     {
                         dr[0] = result.helyezes;
                         dr[1] = result.csapat;
@@ -367,7 +373,7 @@ namespace MyDataGrid.Services
                         dr[9] = result.pontszam;
                         tabellaTabla.Rows.Add(dr);
                         tabellaSheet.tableSor.Add(result);
-                    }
+                    }*/
                 }
                 tabellaSheet.dtg.DataSource = tabellaTabla;
 
@@ -391,109 +397,302 @@ namespace MyDataGrid.Services
             t1.DataType = type;
             dtable.Columns.Add(t1);
         }
-        public Sheet readFromExcel(Sheet excelSheet)
+        public MultiReturn readFromExcel(TableSheet excelSheet)
         {
             var sh = excelSheet.sheet;
-            dtExcelTable = new DataTable();
-            dtExcelTable.Rows.Clear();
-            dtExcelTable.Columns.Clear();
-            var headerRow = sh.GetRow(0);       
+            MultiReturn multiReturn = new MultiReturn();
+            DataTable dataTable = new DataTable();
+            TableSheet tblSheet = new TableSheet();
+
+            dataTable.Rows.Clear();
+            dataTable.Columns.Clear();
+            tblSheet.sorok.Clear();
+            tblSheet.sheetColumns.Clear();
+                        
+            var headerRow = sh.GetRow(0);
+            DataColumn dataColumn = new DataColumn();
+            dataColumn.DefaultValue = sh.GetRow(1).GetCell(0);
             int colCount = headerRow.LastCellNum;
-            for (var c = 0; c < colCount; c++)
+            
+            for (int c = 0; c < colCount; c++)
             {
                 SheetColumn sheetColumn = new SheetColumn();
-                sheetColumn.columnName = headerRow.GetCell(c).ToString();
-                sheetColumn.columnType = headerRow.GetCell(c).CellType.ToString();
-                dtExcelTable.Columns.Add(headerRow.GetCell(c).ToString());
-                var sql = "INSERT INTO sheet_column (order_number, sheet_id, column_name, column_type) VALUES" +
-                    " (@order_number, @ sheet_id, @ column_name, @ column_type) returning id";
-                var excelSheetNameParameter = new { excel_id = excelId, sheet_name = sheet.sheetName };
-                sheetColumn.id = context.connection.QuerySingle<int>(sql, excelFileNameParameter);
-                
+                sheetColumn.order_number=c;
+                sheetColumn.column_name = headerRow.GetCell(c).ToString();
+                sheetColumn.column_type = Convert.ToString(headerRow.GetCell(c).CellType);
+                dataTable.Columns.Add(headerRow.GetCell(c).ToString());
+                tblSheet.sheetColumns.Add(sheetColumn);
             }
-
-           
             var i = 1;
             var currentRow = sh.GetRow(i);
             while (currentRow != null)
             {
                 TableCell tabellaSor = new TableCell();
-                dr = dtExcelTable.NewRow();
+                dr = dataTable.NewRow();
+                TableRow tblRow = new TableRow();
                 for (var j = 0; j < currentRow.Cells.Count; j++)
                 {
                     var cell = currentRow.GetCell(j);
+
+                    TableCell tblCell= new TableCell();
                     if (cell != null)
                         switch (cell.CellType)
                         {
                             case CellType.Numeric:
-                                dr[j] = DateUtil.IsCellDateFormatted(cell)
-                                    ? cell.DateCellValue.ToString(CultureInfo.InvariantCulture)
-                                    : cell.NumericCellValue.ToString(CultureInfo.InvariantCulture);
+                                string columnType = String.Empty;
+                                if (DateUtil.IsCellDateFormatted(cell))
+                                {
+                                    dr[j] = cell.DateCellValue.ToString(CultureInfo.InvariantCulture);
+                                    columnType = "date";
+                                }
+                                else
+                                {
+                                    dr[j]= cell.NumericCellValue.ToString(CultureInfo.InvariantCulture);
+                                    columnType = "numeric";
+                                }
+                                tblCell.value = dr[j].ToString();
+                                tblCell.columnNumber = j;
+                                tblSheet.sheetColumns[j].column_type = columnType;
+                                tblCell.cellType = columnType;
                                 break;
                             case CellType.String:
                                 dr[j] = cell.StringCellValue;
+                                tblCell.value = cell.StringCellValue.ToString();
+                                tblCell.columnNumber = j;
+                                tblSheet.sheetColumns[j].column_type = Convert.ToString(cell.CellType);
+                                tblCell.cellType = Convert.ToString(cell.CellType);
                                 break;
                             case CellType.Blank:
                                 dr[j] = string.Empty;
                                 break;
                         }
+                    tblRow.tableRow.Add(tblCell);
                 }
-                dtExcelTable.Rows.Add(dr);
+                dataTable.Rows.Add(dr);
+                tblSheet.sorok.Add(tblRow);
                 i++;
                 currentRow = sh.GetRow(i);
             }
-            excelSheet.dataTable = dtExcelTable;
-
-            excelSheet.dtg.DataSource = dtExcelTable;
-            return excelSheet;
+            multiReturn.multiReturnTableSheet = tblSheet;
+            multiReturn.multiReturnDataTable= dataTable;
+            return multiReturn;
         }
-        public void writeToDatabase(string filePath, List<Sheet> sheetLista)
+        public void  writeToDatabase(string filePath, List<TableSheet> tableSheetsWriteToDatabase)
         {
+            List<int> columnList = new List<int>();  
             string fileName = Path.GetFileNameWithoutExtension(filePath);
+            var excelFajlMentettList = context.connection.Query("select excel_file_name from excel");
+            foreach (var fajl in excelFajlMentettList)
+            {
+                if (fajl.excel_file_name == fileName)
+                {
+                    MessageBox.Show("Ez az excel fájl már fel lett töltve!");
+                    return;
+                }
+            }
             var excelFileNameParameter = new { excel_file_name = fileName };
             var sql = "INSERT INTO excel (excel_file_name) VALUES (@excel_file_name) returning id";
             var excelId = context.connection.QuerySingle<int>(sql, excelFileNameParameter);
-            foreach (var sheet in sheetLista)
+            foreach (TableSheet foreachTableSheet in tableSheetsWriteToDatabase)
             {
+                columnList.Clear();
                 sql = "INSERT INTO sheet_name (excel_file_name_id, sheet_name) VALUES (@excel_id, @sheet_name) returning id";
-                var excelSheetNameParameter = new { excel_id = excelId, sheet_name = sheet.sheetName };
+                var excelSheetNameParameter = new { excel_id = excelId, sheet_name = foreachTableSheet.sheetName};
                 var excelSheetNameId = context.connection.QuerySingle<int>(sql, excelSheetNameParameter);
-                int columnCount=sheet.dtg.Columns.Count;
-                int rowCount = sheet.dtg.Rows.Count;
-                var sh = sheet.dtg;
-                int k= 0;
-                foreach (DataGridViewColumn col in sh.Columns)
+                for (int i = 0; i<foreachTableSheet.sheetColumns.Count; i++)
                 {
-                    sql = "INSERT INTO sheet_column (column_number, sheet_name_id, column_name, column_type) " +
-                        "VALUES (@column_number, @sheet_name_id, @column_name, @column_type)";
-                    var rowParameter = new
+                    sql = "INSERT INTO sheet_column (order_number, sheet_id, column_name, column_type) " +
+                        "VALUES (@order_number, @sheet_id, @column_name, @column_type) returning id";
+                    var columnParameter = new
                     {
-                        column_number = k,
-                        sheet_name_id = excelSheetNameId,
-                        column_name = col.Name,
-                        column_type = Convert.ToString(sheet.dtg.Rows[0].Cells[k].ValueType)
+                        order_number = i,
+                        sheet_id = excelSheetNameId,
+                        column_name = foreachTableSheet.sheetColumns[i].column_name,
+                        column_type = foreachTableSheet.sheetColumns[i].column_type,
                     };
-                    context.connection.Execute(sql, rowParameter);
-                    k++;
-                };
-                for (int j=0; j<rowCount; j++)
+                    var colId = context.connection.QuerySingle<int>(sql, columnParameter);
+                    columnList.Add(colId);
+                }
+                int j = 0;
+                foreach (TableRow row in foreachTableSheet.sorok)
                 {
-                    for (int i = 0; i < columnCount; i++)
+                    int k = 0;
+                    foreach (TableCell column in row.tableRow)
                     {
-                        sql = "INSERT INTO sheet_row (row_number, sheet_column_number, value) " +
-                            "VALUES (@row_number, @column_number_id, @value)";
+                        sql = "INSERT INTO sheet_row (row_order_number, column_number, sheet_column_id, value) " +
+                            "VALUES (@row_order_number, @column_number, @sheet_column_id, @value)";
                         var rowParameter = new
                         {
-                            row_number = j,
-                            column_number_id = i,
-                            value = sh.Rows[j].Cells[i].Value,
+                            row_order_number = j,
+                            column_number = k,
+                            sheet_column_id = columnList[k],
+                            value = column.value,
                         };
+
                         context.connection.Execute(sql, rowParameter);
-                    };
-                    
+                        k++;
+                    }
+                    j++;
                 }
             }
         }
+        public TabControl readFromDataBase(int cmbIndex)
+        {
+            TabControl tabControl = new TabControl();
+            DataTable dataTable = new DataTable();
+
+
+            var excelFileName = context.connection.QuerySingle<string>("select excel_file_name from excel where id=@id",
+                new
+                {
+                    id = cmbIndex,
+                });
+            var fileSheetList = context.connection.Query("select sheet_name from sheet_name " +
+                    "where excel_file_name_id=@id",
+                new
+                {
+                    id = cmbIndex,
+                });
+            foreach (var sheetName in fileSheetList)
+            {
+
+                TableSheet tblSheet = new TableSheet();
+
+                string kerdes = sheetName.sheet_name;
+                var sql = "select id from sheet_name where sheet_name=@sheetname";
+                var excelFileSheetIdParameter = new { sheetname = kerdes };
+                var fileSheetId = context.connection.QuerySingle<int>(sql, excelFileSheetIdParameter);
+                
+                tblSheet.dtg = new DataGridView();
+                tblSheet.dtg.Size = new Size(800, 400);
+                tblSheet.dtg.Location = new Point(10, 10);
+                tblSheet.dtg.Name = tblSheet.sheetName;
+                TabPage page = new TabPage(sheetName.sheet_name);
+                page.Controls.Add(tblSheet.dtg);
+                tabControl.TabPages.Add(page);
+                DataTable dataTable1 = new DataTable();
+                var columnList = context.connection.Query<SheetColumn>("select id, column_name, column_type from sheet_column " +
+                        "where sheet_id=@id",
+                    new
+                    {
+                        id = fileSheetId,
+                    });
+                List<SheetColumn> columnIdList = new List<SheetColumn>(columnList);
+                
+                for (int c = 0; c < columnIdList.Count; c++)
+                {
+                    SheetColumn sheetColumn = new SheetColumn();
+                    sheetColumn.order_number = c;
+                    sheetColumn.column_name = columnIdList[c].column_name;
+
+                    sheetColumn.column_type = columnIdList[c].column_type;
+                    dataTable.Columns.Add(columnIdList[c].column_name);
+                    tblSheet.sheetColumns.Add(sheetColumn);
+                }
+                foreach (var column in columnList)
+                {
+                    SheetColumn sheetColumn = new SheetColumn();
+                    sheetColumn.id = column.id;
+                    sheetColumn.column_type = context.connection.QuerySingle<string>("select column_type from sheet_column " +
+                        "where id=@id",
+                        new
+                        {
+                            id = column.id,
+                        });
+                    sheetColumn.column_name = context.connection.QuerySingle<string>("select column_name from sheet_column " +
+                        "where id=@id",
+                        new
+                        {
+                            id = column.id,
+                        });
+                    if (sheetColumn.column_type == "numeric")
+                    {
+                        addColumn(sheetColumn.column_name, typeof(decimal), dataTable1);
+                      
+                    }
+                    if (sheetColumn.column_type == "String")
+                    {
+                        addColumn(sheetColumn.column_name, typeof(string), dataTable1);
+                 
+                    }
+                    if (sheetColumn.column_type == "date")
+                    {
+                        addColumn(sheetColumn.column_name, typeof(string), dataTable1);
+
+                    }
+                    columnIdList.Add(sheetColumn);
+                }
+
+                int sorokSzama = context.connection.QuerySingle<int>("select count(*) from sheet_row " +
+                    "where sheet_column_id=@id",
+                    new
+                    {
+                        id = columnIdList[0].id,
+                    });
+                
+                for (int m = 0; m < sorokSzama; m++)
+                {
+                    dr = dataTable1.NewRow();
+                    int l = 0;
+                    foreach (var col in columnIdList)
+                    {
+                        
+                        var columnType = context.connection.QuerySingle<string>("select column_type from sheet_column " +
+                            "where id=@id",
+                            new
+                            {
+                                id = col.id,
+                            });
+                        if (columnType == "numeric")
+                        {
+                            var result = context.connection.QuerySingle<float>("select value from sheet_row " +
+                                "where row_order_number=@row_order_number and sheet_column_id=@sheetcolumnid",
+                                new
+                                {
+                                    row_order_number = m,
+                                    sheetcolumnid = col.id,
+                                });
+                            dr[l] = result;
+                        }
+                        if (columnType == "String")
+                        {
+                            var result = context.connection.QuerySingle<string>("select value from sheet_row " +
+                                "where row_order_number=@row_order_number and sheet_column_id=@sheetcolumnid",
+                                new
+                                {
+                                    row_order_number = m,
+                                    sheetcolumnid = col.id,
+                                });
+                            dr[l] = result;
+                        }
+                        if (columnType == "date")
+                        {
+                            var result = context.connection.QuerySingle<string>("select value from sheet_row " +
+                                "where row_order_number=@row_order_number and sheet_column_id=@sheetcolumnid",
+                                new
+                                {
+                                    row_order_number = m,
+                                    sheetcolumnid = col.id,
+                                });
+                            dr[l] = result;
+                        }
+
+                        l++;
+                    }
+                    dataTable1.Rows.Add(dr);
+                    
+                }
+                tblSheet.dtg.DataSource = dataTable1;
+                int q = 0;
+                while (q < tblSheet.dtg.Columns.Count)
+                {
+                    tblSheet.dtg.Columns[q].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                    q++;
+                }
+            }
+            return tabControl;
+        }
+
     }
 }
 

@@ -72,7 +72,7 @@ namespace MyDataGrid
         }
         private void CmbBetoltAdatbazisbol_SelectedIndexChanged(object sender, EventArgs e)
         {          
-            tabControlTabellak= procedures.cmbSelectedIndexChanged(tabControlTabellak);
+            //tabControlTabellak= procedures.cmbSelectedIndexChanged(tabControlTabellak);
             this.Controls.Add(tabControlTabellak);
         }
 
@@ -81,7 +81,7 @@ namespace MyDataGrid
             if (tabControlTabellak.SelectedIndex > -1)
             {
                 double[] stat = new double[3];
-                stat = procedures.statisztika(tabControlTabellak.SelectedIndex);
+                //stat = procedures.statisztika(tabControlTabellak.SelectedIndex);
                 textBox1.Text= Convert.ToString(stat[0]);
                 textBox2.Text = Convert.ToString(stat[1]);
                 textBox3.Text = Convert.ToString(stat[2]);

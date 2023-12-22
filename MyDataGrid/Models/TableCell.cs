@@ -9,10 +9,10 @@ namespace MyDataGrid
     public class TableCell
     {
 
-        public string columnName { get; set; }
+        public string value { get; set; }
         public int columnNumber { get; set; }
-        public int orderNumber { get; set; }
-        public int sheet_name_id;
+        //public int columnOrderNumber { get; set; }
+        public string cellType { get; set; }
         public TableCell()
         {
             

@@ -10,10 +10,10 @@ namespace MyDataGrid
     public class SheetColumn
     {
         public int id { get; set; }
-        public int orderNumber { get; set; }
-        public int sheetId { get; set; }
-        public string columnName { get; set; }
-        public string columnType { get; set; }
+        public int order_number { get; set; }
+        //public int sheetId { get; set; }
+        public string column_name { get; set; }
+        public string column_type { get; set; }
 
     }
 }
