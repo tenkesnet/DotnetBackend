@@ -62,7 +62,7 @@ namespace MyDataGrid
         {
             if (filePath == null)
                 return;
-            procedures.insertToDatabase(filePath);
+            //procedures.insertToDatabase(filePath);
         }
         private void button3_Click(object sender, EventArgs e)
         {

@@ -1,4 +1,5 @@
-﻿using ExcelDataReader;
+﻿using Dapper;
+using ExcelDataReader;
 using MyDataGrid.Models;
 using MyDataGrid.Services;
 using System;
@@ -16,25 +17,24 @@ namespace MyDataGrid
 {
     public partial class AnyExcelForm : Form
     {
-        MainForm mainForm=new MainForm();
+        //MainForm mainForm=new MainForm();
         string filePath;
-        TableSheet sheet;
+        //TableSheet sheet;
         List<TableSheet> listExcelSheets = new List<TableSheet>();
         List<TableSheet> listExcelSheets2 = new List<TableSheet>();
         List<DataTable> dataTables = new List<DataTable>();
         ComboBox cmbBetoltAdatbazisbol = new ComboBox();
         TabControl tabCtrl = new TabControl();
         Procedures procedures = new Procedures();
-        
+        MultiReturn multiReturn = new MultiReturn();
+        public DapperContext context = new DapperContext();
+
         public AnyExcelForm()
         {
             InitializeComponent();
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            
-            //TableSheet tblSheet = new TableSheet();
             filePath = procedures.dialogOpen(openFileDialog1);
             if (listExcelSheets.Count!=null)
             {
@@ -44,42 +44,17 @@ namespace MyDataGrid
                 listExcelSheets2.Clear();
             }
             listExcelSheets = procedures.getSheetNumbers(filePath);
-            tabCtrl.Height = 500;
-            tabCtrl.Width = 930;
-            tabCtrl.Location = new Point(20, 80);
-            this.Controls.Add(tabCtrl);
             foreach (TableSheet tempSheet in listExcelSheets)
             {
-                tempSheet.dtg = new DataGridView();
-                MultiReturn multiReturn = new MultiReturn();
-                DataTable dt = new DataTable();
-                multiReturn=procedures.readFromExcel(tempSheet);
-                multiReturn.multiReturnDataTable.TableName = tempSheet.sheetName;
-                dataTables.Add(multiReturn.multiReturnDataTable);
-                tempSheet.dtg.DataSource = multiReturn.multiReturnDataTable;
-                tempSheet.dtg.Size = new Size(800, 400);
-                tempSheet.dtg.Location = new Point(10, 10);
-                tempSheet.dtg.Name = tempSheet.sheetName;
-                TabPage page = new TabPage(tempSheet.sheetName);
-                multiReturn.multiReturnTableSheet.sheetName = tempSheet.sheetName;
-                page.Controls.Add(tempSheet.dtg);
-                tabCtrl.TabPages.Add(page);
-                listExcelSheets2.Add(multiReturn.multiReturnTableSheet);
-                int q = 0;
-                while (q < tempSheet.dtg.Columns.Count)
-                {
-                    
-                    tempSheet.dtg.Columns[q].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                    q++;
-                }
-            }
-            
+                multiReturn =procedures.readFromExcel(tempSheet);
+                tabcontrolFeltoltes(tempSheet, tempSheet.sheetName, multiReturn);
+                dtgOszlopSzelessegIgazitas(tempSheet);
+            }       
         }
         private void button2_Click(object sender, EventArgs e)
         {
             procedures.writeToDatabase(filePath, listExcelSheets2);
         }
-
         private void button3_Click(object sender, EventArgs e)
         {
             cmbBetoltAdatbazisbol = procedures.cmbBetolt();
@@ -90,16 +65,53 @@ namespace MyDataGrid
         {
             tabCtrl.TabPages.Clear();
             this.Controls.Remove(tabCtrl);
-            string strtemp;
-            tabCtrl=procedures.readFromDataBase(cmbBetoltAdatbazisbol.SelectedIndex+1);
+            var excelFileName = context.connection.QuerySingle<string>("select excel_file_name from excel where id=@id",
+                new
+                {
+                    id = cmbBetoltAdatbazisbol.SelectedIndex + 1,
+                });
+            var fileSheets = context.connection.Query("select sheet_name from sheet_name " +
+                    "where excel_file_name_id=@id",
+                new
+                {
+                    id = cmbBetoltAdatbazisbol.SelectedIndex + 1,
+                });
+            foreach (var sheetName in fileSheets)
+            {
+                TableSheet tempSheet = new TableSheet();
+                multiReturn = procedures.readFromDataBase(sheetName);
+                tabcontrolFeltoltes(tempSheet, sheetName.sheet_name, multiReturn);
+                dtgOszlopSzelessegIgazitas(tempSheet);
+            }
+            //textBox1.Text = strtemp;
+            //tabControlTabellak = procedures.cmbSelectedIndexChanged(tabControlTabellak, cmbBetoltAdatbazisbol);
+            //this.Controls.Add(tabControlTabellak);
+        }
+        void dtgOszlopSzelessegIgazitas(TableSheet tempSheet1)
+        {
+            int q = 0;
+            while (q < tempSheet1.dtg.Columns.Count)
+            {
+                tempSheet1.dtg.Columns[q].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                q++;
+            }
+        }
+        void tabcontrolFeltoltes(TableSheet tempSheet, string tabName, MultiReturn multiReturn1)
+        {
+            tempSheet.dtg = new DataGridView();
+            dataTables.Add(multiReturn1.multiReturnDataTable);
             this.Controls.Add(tabCtrl);
             tabCtrl.Height = 550;
             tabCtrl.Width = 1230;
             tabCtrl.Location = new Point(20, 80);
-
-            //textBox1.Text = strtemp;
-            //tabControlTabellak = procedures.cmbSelectedIndexChanged(tabControlTabellak, cmbBetoltAdatbazisbol);
-            //this.Controls.Add(tabControlTabellak);
+            tempSheet.dtg.DataSource = multiReturn1.multiReturnDataTable;
+            tempSheet.dtg.Size = new Size(800, 400);
+            tempSheet.dtg.Location = new Point(10, 10);
+            tempSheet.dtg.Name = tabName;
+            TabPage page = new TabPage(tabName);
+            page.Controls.Add(tempSheet.dtg);
+            tabCtrl.TabPages.Add(page);
+            listExcelSheets2.Add(multiReturn1.multiReturnTableSheet);
         }
     }
 }
