@@ -301,12 +301,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnyExcelForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AnyExcelForm.Designer.cs">
-      <DependentUpon>AnyExcelForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="DapperContext.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -322,9 +316,6 @@
     <Compile Include="Models\TableSheet.cs" />
     <Compile Include="Models\SheetColumn.cs" />
     <Compile Include="Models\TableCell.cs" />
-    <EmbeddedResource Include="AnyExcelForm.resx">
-      <DependentUpon>AnyExcelForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

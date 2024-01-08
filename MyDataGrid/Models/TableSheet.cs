@@ -13,7 +13,7 @@ namespace MyDataGrid
     public class TableSheet
     {
         public List<TableRow> sorok { get; set; }
-        public List<TableCell> tableSor;
+        //public List<TableCell> tableSor;
         public List<SheetColumn> sheetColumns { get; set; }
 
         public string sheetName;

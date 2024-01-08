@@ -38,7 +38,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -59,26 +58,26 @@
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.textBox1.Location = new System.Drawing.Point(649, 13);
+            this.textBox1.Location = new System.Drawing.Point(860, 16);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(85, 36);
+            this.textBox1.Size = new System.Drawing.Size(70, 36);
             this.textBox1.TabIndex = 2;
             // 
             // textBox3
             // 
             this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.textBox3.Location = new System.Drawing.Point(972, 13);
+            this.textBox3.Location = new System.Drawing.Point(1444, 10);
             this.textBox3.Multiline = true;
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(86, 36);
+            this.textBox3.Size = new System.Drawing.Size(69, 42);
             this.textBox3.TabIndex = 5;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label2.Location = new System.Drawing.Point(445, 23);
+            this.label2.Location = new System.Drawing.Point(936, 29);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(178, 20);
             this.label2.TabIndex = 7;
@@ -87,17 +86,17 @@
             // textBox2
             // 
             this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.textBox2.Location = new System.Drawing.Point(369, 13);
+            this.textBox2.Location = new System.Drawing.Point(1144, 12);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(60, 36);
+            this.textBox2.Size = new System.Drawing.Size(60, 42);
             this.textBox2.TabIndex = 8;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label3.Location = new System.Drawing.Point(229, 23);
+            this.label3.Location = new System.Drawing.Point(711, 29);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(123, 20);
             this.label3.TabIndex = 12;
@@ -107,7 +106,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label6.Location = new System.Drawing.Point(740, 23);
+            this.label6.Location = new System.Drawing.Point(1210, 29);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(198, 20);
             this.label6.TabIndex = 15;
@@ -115,40 +114,29 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(1090, 12);
+            this.button2.Location = new System.Drawing.Point(229, 13);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(194, 36);
+            this.button2.Size = new System.Drawing.Size(220, 42);
             this.button2.TabIndex = 16;
-            this.button2.Text = "Adatfeltöltés adatbázisba";
+            this.button2.Text = "Excel fájl feltöltése adatbázisba";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_ClickAsync);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(1090, 54);
+            this.button3.Location = new System.Drawing.Point(455, 13);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(194, 36);
+            this.button3.Size = new System.Drawing.Size(250, 42);
             this.button3.TabIndex = 17;
-            this.button3.Text = "Feltöltés adatbázisból";
+            this.button3.Text = "Adattábla feltöltése adatbázisból";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(12, 61);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(210, 42);
-            this.button4.TabIndex = 18;
-            this.button4.Text = "Átlépés az AnyExcel formra";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1295, 651);
-            this.Controls.Add(this.button4);
+            this.ClientSize = new System.Drawing.Size(1525, 651);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label6);
@@ -176,7 +164,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
     }
 }
 

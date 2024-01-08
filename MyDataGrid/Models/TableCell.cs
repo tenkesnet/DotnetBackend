@@ -9,7 +9,7 @@ namespace MyDataGrid
     public class TableCell
     {
 
-        public dynamic value { get; set; }
+        public string value { get; set; }
         public int columnNumber { get; set; }
         //public int columnOrderNumber { get; set; }
         public string cellType { get; set; }
