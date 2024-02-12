@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.JScript;
 using MyDataGrid.Models;
 using MyDataGrid.Services;
+using Npgsql.Internal.TypeHandlers;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.Formula.PTG;
@@ -39,15 +40,16 @@ namespace MyDataGrid
         TabControl tabCtrl = new TabControl();
         Procedures procedures = new Procedures();
         MultiReturn multiReturn = new MultiReturn();
+        List<MultiReturn> multiReturnLista = new List<MultiReturn>();
         public DapperContext context = new DapperContext();
 
         public MainForm()
         {
             InitializeComponent();
-            
         }
         public void button1_Click(object sender, EventArgs e)
         {
+            multiReturnLista.Clear();
             filePath = procedures.dialogOpen(openFileDialog1);
             if (listExcelSheets.Count != null)
             {
@@ -60,6 +62,7 @@ namespace MyDataGrid
             foreach (TableSheet tempSheet in listExcelSheets)
             {
                 multiReturn = procedures.readFromExcel(tempSheet);
+                multiReturnLista.Add(multiReturn);
                 tabcontrolFeltoltes(tempSheet, tempSheet.sheetName, multiReturn);
                 dtgOszlopSzelessegIgazitas(tempSheet);
             }
@@ -97,9 +100,6 @@ namespace MyDataGrid
                 tabcontrolFeltoltes(tempSheet, sheetName.sheet_name, multiReturn);
                 dtgOszlopSzelessegIgazitas(tempSheet);
             }
-            //textBox1.Text = strtemp;
-            //tabControlTabellak = procedures.cmbSelectedIndexChanged(tabControlTabellak, cmbBetoltAdatbazisbol);
-            //this.Controls.Add(tabControlTabellak);
         }
         void dtgOszlopSzelessegIgazitas(TableSheet tempSheet1)
         {
@@ -128,6 +128,32 @@ namespace MyDataGrid
             listExcelSheets2.Add(multiReturn1.multiReturnTableSheet);
             tabCtrl.SelectedIndexChanged += TabCtrl_SelectedIndexChanged;
         }
+        private void button4_Click(object sender, EventArgs e)
+        {          
+            textBox5.Text = "";
+            bool talalat=false;
+            TableRow p;
+            foreach (var multi in multiReturnLista)
+            {
+                p = multi.multiReturnTableSheet.sorok.Find(x => x.tableRow.Find(y => y.value != null && 
+                    y.value.Equals(textBox4.Text)) != null);
+                //var a = multi.multiReturnTableSheet.sorok.Select(x => x.tableRow[1].value).
+                //    Where(x=> x.IndexOf("fc",0, StringComparison.CurrentCultureIgnoreCase)!=-1);
+                var a = multi.multiReturnTableSheet.sorok.Select(x => x.tableRow[1].value).
+                    Where(x=> x.Length<12);
+                var b = multi.multiReturnTableSheet.sorok.First;
+                if (p != null)
+                {
+                    talalat=true;
+                    textBox5.Text = Convert.ToString(p.tableRow[1].value);
+                }
+            }
+            if (talalat==false)
+            {
+                textBox5.Text = "Nincs találat";
+            }
+
+        }
 
         private void TabCtrl_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -136,26 +162,29 @@ namespace MyDataGrid
             //textBox2.Text = dtrow[2].ToString();
             //throw new NotImplementedException();
         }
-        /* public double[] statisztika(int sti)     //A megkapott index a megyét adja, azaz egyúttal a megyei tabellák listájának indexét
-    {
-        double[] tomb = new double [3];
-        double merkozosenkentiGolatlag;
-        double gol;
-        double lottgol;
-        double merkozes;
-        double atlagCsapatGol;
-        double merkozesSzam;
 
-        atlagCsapatGol = Math.Round(tabellak[sti].tableSor.Average(x => x.lott_golok), 3);
-        merkozesSzam = tabellak[sti].tableSor.Sum(x => x.osszes_merkozes) / 2;
-        lottgol = tabellak[sti].tableSor.Sum(y => y.lott_golok);
-        merkozes = tabellak[sti].tableSor.Sum(x => x.osszes_merkozes) / 2;
-        gol = lottgol / merkozes;
-        merkozosenkentiGolatlag = Math.Round(gol, 3);
-        tomb[0] = atlagCsapatGol;
-        tomb[1] = merkozesSzam;
-        tomb[2] = merkozosenkentiGolatlag;
-        return tomb;
-    }*/
+
+
+        /* public double[] statisztika(int sti)     //A megkapott index a megyét adja, azaz egyúttal a megyei tabellák listájának indexét
+{
+double[] tomb = new double [3];
+double merkozosenkentiGolatlag;
+double gol;
+double lottgol;
+double merkozes;
+double atlagCsapatGol;
+double merkozesSzam;
+
+atlagCsapatGol = Math.Round(tabellak[sti].tableSor.Average(x => x.lott_golok), 3);
+merkozesSzam = tabellak[sti].tableSor.Sum(x => x.osszes_merkozes) / 2;
+lottgol = tabellak[sti].tableSor.Sum(y => y.lott_golok);
+merkozes = tabellak[sti].tableSor.Sum(x => x.osszes_merkozes) / 2;
+gol = lottgol / merkozes;
+merkozosenkentiGolatlag = Math.Round(gol, 3);
+tomb[0] = atlagCsapatGol;
+tomb[1] = merkozesSzam;
+tomb[2] = merkozosenkentiGolatlag;
+return tomb;
+}*/
     }
 }

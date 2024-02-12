@@ -192,7 +192,7 @@ namespace MyDataGrid.Services
                                 {
                                     dr[j]= cell.NumericCellValue;
                                     columnType = "numeric";
-                                    //tblCell.value = ((decimal)cell.NumericCellValue);
+                                    tblCell.value = ((decimal)cell.NumericCellValue).ToString();
                                 }
                                 //tblCell.value = dr[j].ToString();
                                 tblCell.columnNumber = j;
@@ -219,7 +219,7 @@ namespace MyDataGrid.Services
             }
             multiReturn.multiReturnTableSheet = tblSheet;
             multiReturn.multiReturnDataTable= dataTable;
-            var p = tblSheet.sorok.Find(x => x.tableRow.Find(y => y.value!=null && y.value.Equals("HARTA SE")) !=null);
+            //multiReturn.multiReturnTableSheet.sorok = tblSheet.sorok;
             return multiReturn;
         }
         public void  writeToDatabase(string filePath, List<TableSheet> tableSheetsWriteToDatabase)

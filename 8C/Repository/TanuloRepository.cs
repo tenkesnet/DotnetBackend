@@ -17,7 +17,7 @@ namespace Tanulok.Repository
 
         {
             var query = "select l.*,t.* from tanulok t JOIN lakcim l on t.lakcim_id=l.id";
-            /*using (var connection = _context.CreateConnection())
+            using (var connection = _context.CreateConnection())
             {
                 var tanulok = await connection.QueryAsync<Lakcim, Tanulo, Tanulo>(query, (l, t) =>
                 {
@@ -25,7 +25,7 @@ namespace Tanulok.Repository
                     return t;
                 });
                 return tanulok;
-            }*/
+            }
             return null;
 
         }

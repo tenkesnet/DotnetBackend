@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
+using Npgsql;
 
 
 namespace Tanulok
@@ -11,17 +12,17 @@ namespace Tanulok
     {
         private readonly IConfiguration _configuration;
         private readonly string _connectionString;
-        public readonly SqliteConnection connection;
+        public readonly NpgsqlConnection connection;
         public DapperContext(IConfiguration configuration)
         {
             _configuration = configuration;
             _connectionString = _configuration.GetConnectionString("SqlConnection");
-            connection = new SqliteConnection(_connectionString);
+            connection = new NpgsqlConnection(_connectionString);
             connection.Open();
         }
         public IDbConnection CreateConnection()
         {
-            var connection =new SqliteConnection(_connectionString);
+            var connection =new NpgsqlConnection(_connectionString);
             connection.Open();
             return connection;
         }

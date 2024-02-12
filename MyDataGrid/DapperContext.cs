@@ -9,8 +9,8 @@ namespace MyDataGrid
 {
     public class DapperContext
     {
-        private readonly string _connectionString;
-        public readonly NpgsqlConnection connection;
+        private string _connectionString { get; }
+        public  NpgsqlConnection connection { get; }
         public DapperContext()
         {
             _connectionString = "Host=localhost;Database=anyexcel;Username=postgres;Password=PostgreSQL";

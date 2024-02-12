@@ -15,6 +15,7 @@ namespace MyDataGrid.Models
         {
             multiReturnDataTable = new DataTable();
             multiReturnTableSheet = new TableSheet();
+            multiReturnTableSheet.sorok = new List<TableRow>();
         }
     }
 }
